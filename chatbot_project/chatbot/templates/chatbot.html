@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chatbot - AI Assistant</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #4a5568;
+                border-radius: 5px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #2d3748;
+            }
+
+        </style>
+    </head>
+
+    <body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen">
+
+        <!-- Chatbot Container -->
+        <div class="w-full max-w-2xl bg-gray-800 rounded-lg shadow-lg p-5 flex flex-col h-[80vh]">
+
+            <!-- Chatbox -->
+            <div id="chatbox" class="flex-1 overflow-y-auto p-3 space-y-4">
+                <div class="text-center text-gray-400 text-sm">Welcome to Chatbot! Ask me anything.</div>
+            </div>
+
+            <!-- Input Box -->
+            <div class="border-t border-gray-600 mt-2 p-2 flex items-center">
+                <input id="user-input" type="text"
+                    class="w-full bg-gray-700 text-white p-2 rounded-lg focus:outline-none"
+                    placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+                <button onclick="askChatbot()"
+                    class="ml-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg">Send</button>
+            </div>
+        </div>
+
+        <script>
+            function askChatbot() {
+                let inputField = document.getElementById("user-input");
+                let userMessage = inputField.value.trim();
+                if (userMessage === "") return;
+
+                // Display user message
+                addMessage("You", userMessage, "text-right text-blue-400");
+
+                // Clear input
+                inputField.value = "";
+
+                // Show typing indicator
+                let chatbox = document.getElementById("chatbox");
+                let botTyping = document.createElement("div");
+                botTyping.innerHTML = `<span class="text-gray-400 text-sm">Bot is typing...</span>`;
+                botTyping.id = "typing-indicator";
+                chatbox.appendChild(botTyping);
+                chatbox.scrollTop = chatbox.scrollHeight;
+
+                // ✅ Fix: Ensure the correct API URL
+                fetch(`http://127.0.0.1:8000/chatbot/response/?question=${encodeURIComponent(userMessage)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("typing-indicator").remove(); // Remove typing indicator
+                        addMessage("Bot", data.response, "text-left text-green-400");
+                    })
+                    .catch(error => {
+                        document.getElementById("typing-indicator").remove();
+                        addMessage("Bot", "Sorry, there was an error!", "text-left text-red-400");
+                    });
+            }
+
+            function handleKeyPress(event) {
+                if (event.key === "Enter") {
+                    askChatbot();
+                }
+            }
+
+            function addMessage(sender, message, alignment) {
+                let chatbox = document.getElementById("chatbox");
+                let messageDiv = document.createElement("div");
+                messageDiv.className = `p-2 ${alignment}`;
+                messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                chatbox.appendChild(messageDiv);
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }
+        </script>
+
+    </body>
+
+</html>
