@@ -38,5 +38,5 @@ Copy
 Edit
 python manage.py runserver
 4️⃣ Open in Browser
-Go to http://127.0.0.1:5000/ (Flask) or http://127.0.0.1:8000/ (Django).
+Go  http://127.0.0.1:8000/ (Django).
 
