@@ -22,17 +22,7 @@ This project is an AI-powered chatbot trained on psychology-related datasets. It
 ✔️ Custom NLP model for text analysis
 ✔️ Easy deployment via Flask/Django
 
-📥 Installation & Setup
-1️⃣ Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/yourusername/ai-psychology-chatbot.git
-cd ai-psychology-chatbot
-2️⃣ Install Dependencies
-bash
-Copy
-Edit
+
 pip install -r requirements.txt
 3️⃣ Run the Chatbot
 If using Flask:
